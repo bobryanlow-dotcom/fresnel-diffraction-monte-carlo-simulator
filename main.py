@@ -109,12 +109,20 @@ def simulate_2d_rectangular():
     intensity = np.abs(E_field)**2 
     extents = (x1, x2, y1, y2) 
 
-    # Plotting
+    # Plot 1: Intensity
     plt.imshow(intensity, vmin=0.0, vmax=1.0 * intensity.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
     plt.xlabel("x (m)")
     plt.ylabel("y (m)")
     plt.title(f'Rectangular aperture diffraction\nz = {z:4.2f}m, aperture_width = {aperture_width:1.1e}m')
     plt.colorbar(label=r"Intensity $|E|^2$")
+    plt.show()
+
+    # Plot 2: Integration Error
+    plt.imshow(error_total, vmin=0.0, vmax=1.0 * error_total.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
+    plt.xlabel("x (m)")
+    plt.ylabel("y (m)")
+    plt.title("Part 2 Integration Error")
+    plt.colorbar(label="Error Estimate")
     plt.show()
 
 
@@ -150,20 +158,31 @@ def simulate_2d_circular():
     X, Y = np.meshgrid(xvals, yvals) 
 
     E_field = np.zeros_like(X, dtype=complex)
+    error_total = np.zeros_like(X, dtype=float)
     
     for i in range(num):
         for j in range(num):
             E, err = total_field(Y[i, j], X[i, j], wavelength, z, R)
             E_field[i, j] = E
+            error_total[i, j] = err
 
     intensity = np.abs(E_field)**2 
     extents = (x1, x2, y1, y2) 
 
+    # Plot 1: Intensity
     plt.imshow(intensity, vmin=0.0, vmax=1.0 * intensity.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
     plt.xlabel("x (m)")
     plt.ylabel("y (m)")
     plt.title(f'Circular aperture diffraction\nz = {z:4.2f}m, R = {R:1.1e}m')
     plt.colorbar(label=r"Intensity $|E|^2$")
+    plt.show()
+
+    # Plot 2: Integration Error
+    plt.imshow(error_total, vmin=0.0, vmax=1.0 * error_total.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
+    plt.xlabel("x (m)")
+    plt.ylabel("y (m)")
+    plt.title("Part 3 Integration Error")
+    plt.colorbar(label="Error Estimate")
     plt.show()
 
 
@@ -215,20 +234,31 @@ def simulate_mc_circular():
     X, Y = np.meshgrid(x_vals, y_vals)
 
     E_field = np.zeros_like(X, dtype=complex)
+    error_total = np.zeros_like(X, dtype=float)
 
     for i in range(num):
         for j in range(num):
             E, err = field_mc(Y[i, j], X[i, j], wavelength, z, R, N)
             E_field[i, j] = E
+            error_total[i, j] = err
 
     intensity = np.abs(E_field)**2
     extents = (x1, x2, x1, x2) 
 
+    # Plot 1: Intensity
     plt.imshow(intensity, vmin=0.0, vmax=1.0 * intensity.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
     plt.xlabel("x (m)")
     plt.ylabel("y (m)")
     plt.title(f'Monte Carlo Integration for Circular aperture\nz = {z:4.2f}m, R = {R:1.1e}m')
     plt.colorbar(label=r"Intensity $|E|^2$")
+    plt.show()
+
+    # Plot 2: Integration Error
+    plt.imshow(error_total, vmin=0.0, vmax=1.0 * error_total.max(), extent=extents, origin="lower", cmap="nipy_spectral_r") 
+    plt.xlabel("x (m)")
+    plt.ylabel("y (m)")
+    plt.title("Part 4 Integration Error")
+    plt.colorbar(label="Error Estimate")
     plt.show()
 
 # Execution Block
